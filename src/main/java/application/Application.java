@@ -1,7 +1,5 @@
-package appliacation;
+package application;
 
-import tabuleiro.Posicao;
-import tabuleiro.Tabuleiro;
 import xadrez.Partida;
 
 public class Application {
