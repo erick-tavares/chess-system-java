@@ -15,4 +15,8 @@ public class Cavalo extends PecaDeXadrez {
         //Horse
         return "H";
     }
+
+    public boolean[][] movimentosPossiveis() {
+        return new boolean[0][];
+    }
 }

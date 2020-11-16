@@ -15,4 +15,8 @@ public class Peao extends PecaDeXadrez {
         //Pawn
         return "p";
     }
+
+    public boolean[][] movimentosPossiveis() {
+        return new boolean[0][];
+    }
 }

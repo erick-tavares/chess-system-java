@@ -25,11 +25,11 @@ public class Tabuleiro {
         return colunas;
     }
 
-    public Peca setPosicaoDaPeca(int linha, int coluna) {
+    public Peca getPeca(int linha, int coluna) {
         return pecas[linha][coluna];
     }
 
-    public Peca setPosicaoDaPeca(Posicao posicao) {
+    public Peca getPeca(Posicao posicao) {
         return pecas[posicao.getLinha()][posicao.getColuna()];
     }
 
@@ -42,26 +42,33 @@ public class Tabuleiro {
 
     }
 
-    public boolean posicaoExistente(int linha, int coluna){
-        if(linha >= 0 && linha < linhas && coluna >= 0 && coluna < colunas){
-           Posicao posicao = new Posicao(linha,coluna);
-            if(setPosicaoDaPeca(posicao) != null){
-                throw new TabuleiroException("Existe uma peça na posição " + posicao);
-            }
-            return true;
+    public Peca removerPeca(Posicao posicao) {
+        if(!posicaoExistente(posicao)){
+            throw new TabuleiroException("Posição fora do tabuleiro");
         }
-        throw new TabuleiroException("Posição fora do tabuleiro");
+        if (getPeca(posicao) == null){
+            return null;
+        }
+        Peca pecaNoTabuleiro = getPeca(posicao);
+        pecaNoTabuleiro.posicao = null;
+        pecas[posicao.getLinha()][posicao.getColuna()] = null;
+
+        return pecaNoTabuleiro;
+
     }
 
-//    public boolean posicaoExistente(int linha, int coluna){
-//    return linha >= 0 && linha <= linhas && coluna >= 0 && coluna <= colunas;
-//    }
-//
-//    public boolean posicaoValida(Posicao posicao){
-//        return posicaoExistente(posicao.getLinha(),posicao.getColuna());
-//    }
-//
-//    public boolean existePecaNaPosicao(Posicao posicao){
-//        return setPosicaoDaPeca(posicao) != null;
-//    }
+    public boolean posicaoExistente(int linha, int coluna){
+    return linha >= 0 && linha <= linhas && coluna >= 0 && coluna <= colunas;
+    }
+
+    public boolean posicaoExistente(Posicao posicao){
+        return posicaoExistente(posicao.getLinha(),posicao.getColuna());
+    }
+
+    public boolean existePecaNaPosicao(Posicao posicao){
+        if (!posicaoExistente(posicao)){
+            throw new TabuleiroException("Posição fora do tabuleiro");
+        }
+        return getPeca(posicao) != null;
+    }
 }

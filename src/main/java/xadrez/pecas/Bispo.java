@@ -14,4 +14,8 @@ public class Bispo extends PecaDeXadrez {
         //Bishop
         return "B";
     }
+
+    public boolean[][] movimentosPossiveis() {
+        return new boolean[0][];
+    }
 }

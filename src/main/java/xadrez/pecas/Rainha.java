@@ -15,4 +15,8 @@ public class Rainha extends PecaDeXadrez {
         //Queen
         return "Q";
     }
+
+    public boolean[][] movimentosPossiveis() {
+        return new boolean[0][];
+    }
 }

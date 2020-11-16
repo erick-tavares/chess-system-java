@@ -1,5 +1,8 @@
 package xadrez;
 
+import exceptions.XadrezException;
+import tabuleiro.Peca;
+import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
 import xadrez.pecas.*;
 
@@ -8,25 +11,25 @@ public class Partida {
     private Tabuleiro tabuleiro;
 
     public Partida() {
-        tabuleiro = new Tabuleiro(8,8);
+        tabuleiro = new Tabuleiro(8, 8);
         iniciarPartida();
     }
 
-    public PecaDeXadrez[][] getPecas(){
+    public PecaDeXadrez[][] getPecas() {
         PecaDeXadrez[][] pecaDoTabuleiro = new PecaDeXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
-        for(int i = 0;i < tabuleiro.getLinhas();i++  ){
-            for(int j = 0; j < tabuleiro.getColunas(); j ++){
-                pecaDoTabuleiro[i][j] = (PecaDeXadrez) tabuleiro.setPosicaoDaPeca(i,j);
+        for (int i = 0; i < tabuleiro.getLinhas(); i++) {
+            for (int j = 0; j < tabuleiro.getColunas(); j++) {
+                pecaDoTabuleiro[i][j] = (PecaDeXadrez) tabuleiro.getPeca(i, j);
             }
         }
         return pecaDoTabuleiro;
     }
 
-    private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca){
-        tabuleiro.posicionarPeca(peca, new PosicaoXadrez(coluna,linha).toPosicao());
+    private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
+        tabuleiro.posicionarPeca(peca, new PosicaoXadrez(coluna, linha).toPosicao());
     }
 
-    private void iniciarPartida(){
+    private void iniciarPartida() {
 
         colocarNovaPeca('a', 1, new Torre(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('b', 1, new Cavalo(tabuleiro, Cor.BRANCA));
@@ -65,6 +68,32 @@ public class Partida {
         colocarNovaPeca('g', 7, new Peao(tabuleiro, Cor.PRETA));
         colocarNovaPeca('h', 7, new Peao(tabuleiro, Cor.PRETA));
 
+    }
+
+    public PecaDeXadrez moverPecaDeXadrez(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
+        Posicao origem = posicaoDeOrigem.toPosicao();
+        Posicao destino = posicaoDeDestino.toPosicao();
+        validarPosicaoDeOrigem(origem);
+        Peca pecaCapturada = executarMovimento(origem, destino);
+
+        return (PecaDeXadrez) pecaCapturada;
 
     }
+
+    private Peca executarMovimento(Posicao origem, Posicao destino) {
+        Peca p = tabuleiro.removerPeca(origem);
+        Peca pecaCapturada = tabuleiro.removerPeca(destino);
+        tabuleiro.posicionarPeca(p, destino);
+        return pecaCapturada;
+
+    }
+
+    private void validarPosicaoDeOrigem(Posicao posicao) {
+        if (!tabuleiro.existePecaNaPosicao(posicao)) {
+            throw new XadrezException("Não existe peça na posição de origem");
+        }if(!tabuleiro.getPeca(posicao).existeAlgumMovimentoPossivel()){
+            throw new XadrezException("Não há movimentos possíveis para está peça");
+        }
+    }
 }
+
