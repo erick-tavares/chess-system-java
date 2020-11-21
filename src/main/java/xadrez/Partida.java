@@ -9,9 +9,13 @@ import xadrez.pecas.*;
 public class Partida {
 
     private Tabuleiro tabuleiro;
+    private int turno;
+    private Cor jogadorAtual;
 
     public Partida() {
         tabuleiro = new Tabuleiro(8, 8);
+        turno = 1;
+        jogadorAtual = Cor.BRANCA;
         iniciarPartida();
     }
 
@@ -27,6 +31,11 @@ public class Partida {
 
     private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
         tabuleiro.posicionarPeca(peca, new PosicaoXadrez(coluna, linha).toPosicao());
+    }
+
+    private void proximoTurno(){
+        turno ++;
+        jogadorAtual = (jogadorAtual == Cor.BRANCA) ? Cor.PRETA : Cor.BRANCA;
     }
 
     private void iniciarPartida() {
@@ -68,7 +77,7 @@ public class Partida {
         colocarNovaPeca('g', 7, new Peao(tabuleiro, Cor.PRETA));
         colocarNovaPeca('h', 7, new Peao(tabuleiro, Cor.PRETA));
 
-        colocarNovaPeca('d', 6, new Torre(tabuleiro, Cor.PRETA));
+        colocarNovaPeca('d', 6, new Rei(tabuleiro, Cor.PRETA));
 
     }
 
@@ -78,12 +87,13 @@ public class Partida {
         return tabuleiro.getPeca(posicao).movimentosPossiveis();
     }
 
-    public PecaDeXadrez moverPecaDeXadrez(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
+    public PecaDeXadrez executarMovimentoDeXadrez(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
         Posicao origem = posicaoDeOrigem.toPosicao();
         Posicao destino = posicaoDeDestino.toPosicao();
         validarPosicaoDeOrigem(origem);
         validarPosicaoDedestino(origem, destino);
         Peca pecaCapturada = executarMovimento(origem, destino);
+        proximoTurno();
 
         return (PecaDeXadrez) pecaCapturada;
 
@@ -100,7 +110,11 @@ public class Partida {
     private void validarPosicaoDeOrigem(Posicao posicao) {
         if (!tabuleiro.existePecaNaPosicao(posicao)) {
             throw new XadrezException("Não existe peça na posição de origem");
-        }if(!tabuleiro.getPeca(posicao).existeAlgumMovimentoPossivel()){
+        }
+        if (jogadorAtual != ((PecaDeXadrez)tabuleiro.getPeca(posicao)).getCor()){
+            throw new XadrezException("A peça escolhida não é sua");
+        }
+        if(!tabuleiro.getPeca(posicao).existeAlgumMovimentoPossivel()){
             throw new XadrezException("Não há movimentos possíveis para está peça");
         }
     }
@@ -111,5 +125,12 @@ public class Partida {
         }
     }
 
+    public int getTurno() {
+        return turno;
+    }
+
+    public Cor getJogadorAtual() {
+        return jogadorAtual;
+    }
 }
 

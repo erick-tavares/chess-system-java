@@ -1,6 +1,7 @@
 package application;
 
 import xadrez.Cor;
+import xadrez.Partida;
 import xadrez.PecaDeXadrez;
 import xadrez.PosicaoXadrez;
 
@@ -31,6 +32,12 @@ public class UI {
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public static void printPartida(Partida partida){
+        printTabuleiro(partida.getPecas());
+        System.out.println("Turno: " + partida.getTurno());
+        System.out.println("Aguardando jogador " + partida.getJogadorAtual());
     }
 
     public static void printTabuleiro(PecaDeXadrez[][] pecas) {
@@ -83,7 +90,6 @@ public class UI {
         try {
             String s = sc.nextLine();
             char coluna = s.charAt(0);
-            // int linha = s.charAt(1);
             int linha = Integer.parseInt(s.substring(1));
 
             return new PosicaoXadrez(coluna, linha);

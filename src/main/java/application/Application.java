@@ -1,8 +1,6 @@
 package application;
 
-import exceptions.TabuleiroException;
 import exceptions.XadrezException;
-import tabuleiro.Tabuleiro;
 import xadrez.Partida;
 import xadrez.PecaDeXadrez;
 import xadrez.PosicaoXadrez;
@@ -20,7 +18,7 @@ public class Application {
 
         while (true) {
             try {
-                UI.printTabuleiro(partida.getPecas());
+                UI.printPartida(partida);
                 UI.clearScreen();
                 System.out.println();
                 System.out.println("Origem");
@@ -34,7 +32,7 @@ public class Application {
                 System.out.println("Destino");
                 PosicaoXadrez destino = UI.lerPosicaoXadrez(sc);
 
-                PecaDeXadrez pecaCapturada = partida.moverPecaDeXadrez(origem, destino);
+                PecaDeXadrez pecaCapturada = partida.executarMovimentoDeXadrez(origem, destino);
             }catch (XadrezException e){
                 System.out.println(e.getMessage());
                 sc.nextLine();
