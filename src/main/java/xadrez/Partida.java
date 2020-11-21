@@ -68,12 +68,21 @@ public class Partida {
         colocarNovaPeca('g', 7, new Peao(tabuleiro, Cor.PRETA));
         colocarNovaPeca('h', 7, new Peao(tabuleiro, Cor.PRETA));
 
+        colocarNovaPeca('d', 6, new Torre(tabuleiro, Cor.PRETA));
+
+    }
+
+    public boolean[][] movimentosPossiveis(PosicaoXadrez posicaoOrigem){
+        Posicao posicao = posicaoOrigem.toPosicao();
+        validarPosicaoDeOrigem(posicao);
+        return tabuleiro.getPeca(posicao).movimentosPossiveis();
     }
 
     public PecaDeXadrez moverPecaDeXadrez(PosicaoXadrez posicaoDeOrigem, PosicaoXadrez posicaoDeDestino) {
         Posicao origem = posicaoDeOrigem.toPosicao();
         Posicao destino = posicaoDeDestino.toPosicao();
         validarPosicaoDeOrigem(origem);
+        validarPosicaoDedestino(origem, destino);
         Peca pecaCapturada = executarMovimento(origem, destino);
 
         return (PecaDeXadrez) pecaCapturada;
@@ -95,5 +104,12 @@ public class Partida {
             throw new XadrezException("Não há movimentos possíveis para está peça");
         }
     }
+
+    private void validarPosicaoDedestino(Posicao origem, Posicao destino){
+        if(!tabuleiro.getPeca(origem).movimentoPossivel(destino)){
+            throw new XadrezException("A peça escolhida não pode se mover para o destino selecionado");
+        }
+    }
+
 }
 

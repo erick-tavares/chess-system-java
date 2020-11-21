@@ -58,7 +58,7 @@ public class Tabuleiro {
     }
 
     public boolean posicaoExistente(int linha, int coluna){
-    return linha >= 0 && linha <= linhas && coluna >= 0 && coluna <= colunas;
+    return linha >= 0 && linha < linhas && coluna >= 0 && coluna < colunas;
     }
 
     public boolean posicaoExistente(Posicao posicao){
@@ -67,7 +67,7 @@ public class Tabuleiro {
 
     public boolean existePecaNaPosicao(Posicao posicao){
         if (!posicaoExistente(posicao)){
-            throw new TabuleiroException("Posição fora do tabuleiro");
+            throw new TabuleiroException("Posição não existe no tabuleiro");
         }
         return getPeca(posicao) != null;
     }
