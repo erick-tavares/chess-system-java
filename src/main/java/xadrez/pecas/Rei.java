@@ -3,13 +3,16 @@ package xadrez.pecas;
 import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
 import xadrez.Cor;
+import xadrez.Partida;
 import xadrez.PecaDeXadrez;
 
 public class Rei extends PecaDeXadrez {
 
+    private Partida partida;
 
-    public Rei(Tabuleiro tabuleiro, Cor cor) {
+    public Rei(Tabuleiro tabuleiro, Cor cor, Partida partida) {
         super(tabuleiro, cor);
+        this.partida = partida;
     }
 
     @Override
@@ -21,7 +24,11 @@ public class Rei extends PecaDeXadrez {
     private boolean podeMover(Posicao posicao){
         PecaDeXadrez p = (PecaDeXadrez) getTabuleiro().getPeca(posicao);
         return p == null || p.getCor() != getCor();
+    }
 
+    private boolean checakTorreParaRoque(Posicao posicao) {
+        PecaDeXadrez p =(PecaDeXadrez) getTabuleiro().getPeca(posicao);
+        return p != null && p instanceof Torre && p.getCor() == getCor() && p.getMoveCount() == 0;
     }
 
     @Override
@@ -76,6 +83,30 @@ public class Rei extends PecaDeXadrez {
         p.setValues(posicao.getLinha() +1, posicao.getColuna() +1);
         if(getTabuleiro().posicaoExistente(p) && podeMover(p)){
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
+        }
+
+        //movimento especial roque
+        if (getMoveCount() == 0 && !partida.isXequeMate()){
+            //lado do rei
+            Posicao torreDoRei = new Posicao(posicao.getLinha(), posicao.getColuna() + 3);
+            if(checakTorreParaRoque(torreDoRei)){
+                Posicao p1 = new Posicao(posicao.getLinha(), posicao.getColuna() + 1);
+                Posicao p2 = new Posicao(posicao.getLinha(), posicao.getColuna() + 2);
+                if (getTabuleiro().getPeca(p1) == null && getTabuleiro().getPeca(p2) == null){
+                    movimentosVerdadeiros[p.getLinha()][p.getColuna() + 2] = true;
+                }
+            }
+
+            //lado da rainha
+            Posicao torreDaRainha = new Posicao(posicao.getLinha(), posicao.getColuna() - 4);
+            if(checakTorreParaRoque(torreDaRainha)){
+                Posicao p1 = new Posicao(posicao.getLinha(), posicao.getColuna() - 1);
+                Posicao p2 = new Posicao(posicao.getLinha(), posicao.getColuna() - 2);
+                Posicao p3 = new Posicao(posicao.getLinha(), posicao.getColuna() - 3);
+                if (getTabuleiro().getPeca(p1) == null && getTabuleiro().getPeca(p2) == null && getTabuleiro().getPeca(p3) == null){
+                    movimentosVerdadeiros[p.getLinha()][p.getColuna() - 2] = true;
+                }
+            }
         }
         return movimentosVerdadeiros;
     }
