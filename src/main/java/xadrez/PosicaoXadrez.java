@@ -28,8 +28,8 @@ public class PosicaoXadrez {
         return new Posicao(8 - linha, coluna - 'a');
     }
 
-    private static PosicaoXadrez fromPosicao(Posicao posicao){
-        return new PosicaoXadrez((char)('a' - posicao.getColuna()),8 - posicao.getLinha());
+    protected static PosicaoXadrez fromPosicao(Posicao posicao){
+        return new PosicaoXadrez((char)('a' + posicao.getColuna()),8 - posicao.getLinha());
     }
 
     @Override

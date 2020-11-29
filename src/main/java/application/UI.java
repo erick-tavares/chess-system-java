@@ -5,8 +5,7 @@ import xadrez.Partida;
 import xadrez.PecaDeXadrez;
 import xadrez.PosicaoXadrez;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class UI {
 
@@ -34,10 +33,17 @@ public class UI {
         System.out.flush();
     }
 
-    public static void printPartida(Partida partida){
+    public static void printPartida(Partida partida, List<PecaDeXadrez> capturadas){
         printTabuleiro(partida.getPecas());
+        System.out.println();
         System.out.println("Turno: " + partida.getTurno());
+            printPecasCapturadas(capturadas);
+        System.out.println();
         System.out.println("Aguardando jogador " + partida.getJogadorAtual());
+
+        if(partida.getXeque()){
+            System.out.println("XEQUE!!");
+        }
     }
 
     public static void printTabuleiro(PecaDeXadrez[][] pecas) {
@@ -97,5 +103,30 @@ public class UI {
             throw new InputMismatchException("Erro ao ler posição, valor inválido");
         }
 
+    }
+
+    private static void printPecasCapturadas (List<PecaDeXadrez> capturadas){
+        List<PecaDeXadrez> pecasBrancas = new ArrayList<>();
+        List<PecaDeXadrez> pecasPretas = new ArrayList<>();
+
+        for(PecaDeXadrez peca : capturadas){
+//           peca = (peca.getCor() == Cor.BRANCA) ? pecasBrancas.add(peca) : pecasPretas.add(peca);
+            if (peca.getCor() == Cor.BRANCA){
+                pecasBrancas.add(peca);
+            }else{
+                pecasPretas.add(peca);
+            }
+            System.out.println("Peças capturadas");
+            System.out.print("Brancas: ");
+            System.out.print(ANSI_WHITE);
+            System.out.println(Arrays.toString(pecasBrancas.toArray()));
+            System.out.print(ANSI_RESET);
+
+            System.out.print("Pretas: ");
+            System.out.print(ANSI_YELLOW);
+            System.out.println(Arrays.toString(pecasPretas.toArray()));
+            System.out.print(ANSI_RESET);
+
+        }
     }
 }

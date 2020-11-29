@@ -29,7 +29,7 @@ public class Torre extends PecaDeXadrez {
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
             p.setLinha(p.getLinha() -1);
         }
-        if (getTabuleiro().existePecaNaPosicao(p) && haPecaAdversariaNaPosicao(p)){
+        if (getTabuleiro().posicaoExistente(p) && haPecaAdversariaNaPosicao(p)){
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
         }
 
@@ -39,7 +39,7 @@ public class Torre extends PecaDeXadrez {
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
             p.setColuna(p.getColuna() -1);
         }
-        if (getTabuleiro().existePecaNaPosicao(p) && haPecaAdversariaNaPosicao(p)){
+        if (getTabuleiro().posicaoExistente(p) && haPecaAdversariaNaPosicao(p)){
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
         }
 
@@ -49,7 +49,7 @@ public class Torre extends PecaDeXadrez {
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
             p.setColuna(p.getColuna() + 1);
         }
-        if (getTabuleiro().existePecaNaPosicao(p) && haPecaAdversariaNaPosicao(p)){
+        if (getTabuleiro().posicaoExistente(p) && haPecaAdversariaNaPosicao(p)){
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
         }
 
@@ -59,7 +59,7 @@ public class Torre extends PecaDeXadrez {
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
             p.setLinha(p.getLinha() + 1);
         }
-        if (getTabuleiro().existePecaNaPosicao(p) && haPecaAdversariaNaPosicao(p)){
+        if (getTabuleiro().posicaoExistente(p) && haPecaAdversariaNaPosicao(p)){
             movimentosVerdadeiros[p.getLinha()][p.getColuna()] = true;
         }
 
