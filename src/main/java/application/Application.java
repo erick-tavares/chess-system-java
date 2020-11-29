@@ -19,7 +19,7 @@ public class Application {
         Partida partida = new Partida();
         List<PecaDeXadrez> capturadas = new ArrayList<>();
 
-        while (true) {
+        while (!partida.isXequeMate()) {
             try {
                 UI.printPartida(partida, capturadas);
                 UI.clearScreen();
@@ -49,6 +49,8 @@ public class Application {
             }
 
         }
+        UI.clearScreen();
+        UI.printPartida(partida, capturadas);
 
     }
 

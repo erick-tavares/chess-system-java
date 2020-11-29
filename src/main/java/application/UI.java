@@ -33,16 +33,21 @@ public class UI {
         System.out.flush();
     }
 
-    public static void printPartida(Partida partida, List<PecaDeXadrez> capturadas){
+    public static void printPartida(Partida partida, List<PecaDeXadrez> capturadas) {
         printTabuleiro(partida.getPecas());
         System.out.println();
-        System.out.println("Turno: " + partida.getTurno());
-            printPecasCapturadas(capturadas);
+        printPecasCapturadas(capturadas);
         System.out.println();
-        System.out.println("Aguardando jogador " + partida.getJogadorAtual());
-
-        if(partida.getXeque()){
-            System.out.println("XEQUE!!");
+        System.out.println("Turno: " + partida.getTurno());
+        if (!partida.isXequeMate()) {
+            System.out.println();
+            System.out.println("Aguardando jogador " + partida.getJogadorAtual());
+            if (partida.isXeque()) {
+                System.out.println("XEQUE!!");
+            }
+        } else {
+            System.out.println("XEQUE-MATE");
+            System.out.println("Vencedor é o jogadro " + partida.getJogadorAtual());
         }
     }
 
@@ -60,7 +65,7 @@ public class UI {
         System.out.println("   A B C D E F G H");
     }
 
-    public static void printTabuleiro(PecaDeXadrez[][] pecas, boolean [][] movimentosPossiveis) {
+    public static void printTabuleiro(PecaDeXadrez[][] pecas, boolean[][] movimentosPossiveis) {
 
         System.out.println("  ------------------");
         for (int i = 0; i < pecas.length; i++) {
@@ -75,7 +80,7 @@ public class UI {
     }
 
     private static void printPeca(PecaDeXadrez peca, boolean background) {
-        if (background){
+        if (background) {
             System.out.print(ANSI_BLUE_BACKGROUND);
         }
         if (peca == null) {
@@ -105,15 +110,15 @@ public class UI {
 
     }
 
-    private static void printPecasCapturadas (List<PecaDeXadrez> capturadas){
+    private static void printPecasCapturadas(List<PecaDeXadrez> capturadas) {
         List<PecaDeXadrez> pecasBrancas = new ArrayList<>();
         List<PecaDeXadrez> pecasPretas = new ArrayList<>();
 
-        for(PecaDeXadrez peca : capturadas){
+        for (PecaDeXadrez peca : capturadas) {
 //           peca = (peca.getCor() == Cor.BRANCA) ? pecasBrancas.add(peca) : pecasPretas.add(peca);
-            if (peca.getCor() == Cor.BRANCA){
+            if (peca.getCor() == Cor.BRANCA) {
                 pecasBrancas.add(peca);
-            }else{
+            } else {
                 pecasPretas.add(peca);
             }
             System.out.println("Peças capturadas");

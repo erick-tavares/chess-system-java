@@ -15,11 +15,7 @@ public class Partida {
     private int turno;
     private Cor jogadorAtual;
     private boolean xeque;
-
-    public boolean getXeque(){
-        return xeque;
-    }
-
+    private boolean xequeMate;
     private List<Peca> pecasNoTabuleiro = new ArrayList<>();
     private List<Peca> pecasCapturadas = new ArrayList<>();
 
@@ -28,6 +24,14 @@ public class Partida {
         turno = 1;
         jogadorAtual = Cor.BRANCA;
         iniciarPartida();
+    }
+
+    public boolean isXeque() {
+        return xeque;
+    }
+
+    public boolean isXequeMate() {
+        return xequeMate;
     }
 
     public PecaDeXadrez[][] getPecas() {
@@ -111,12 +115,11 @@ public class Partida {
             throw new XadrezException("Você não pode se colocar em xeque");
         }
 
-       // xeque = (estaEmXeque(oponente(jogadorAtual))) ? true : false;
-        if (estaEmXeque(oponente(jogadorAtual))){
-            xeque = true;
-        } else{
-            xeque = false;
-        }
+         xeque = (estaEmXeque(oponente(jogadorAtual))) ? true : false;
+
+         if (estaEmXeque(oponente(jogadorAtual))) {
+             xequeMate = true;
+         }
 
         proximoTurno();
 
@@ -191,6 +194,32 @@ public class Partida {
             }
         }
         return false;
+    }
+
+    private boolean estaEmXequeMate(Cor cor) {
+        if (!estaEmXeque(cor)) {
+            return false;
+        }
+        List<Peca> pecaDaCor = filtraPecasPorCor(cor);
+        for (Peca peca : pecaDaCor) {
+            boolean[][] mat = peca.movimentosPossiveis();
+            for (int i = 0; i < tabuleiro.getLinhas(); i++) {
+                for (int j = 0; j < tabuleiro.getColunas(); j++) {
+                    if (mat[i][j]) {
+                        Posicao origem = ((PecaDeXadrez) peca).getPosicaoXadrez().toPosicao();
+                        Posicao destino = new Posicao(i, j);
+                        Peca pecaCapturada = executarMovimento(origem, destino);
+                        boolean estaEmXeque = estaEmXeque(cor);
+                        desfazerMovimento(origem, destino, pecaCapturada);
+
+                        if (!estaEmXeque) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private List<Peca> filtraPecasPorCor(Cor cor) {
