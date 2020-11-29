@@ -108,7 +108,7 @@ public class Partida {
         Posicao destino = posicaoDeDestino.toPosicao();
         validarPosicaoDeOrigem(origem);
         validarPosicaoDedestino(origem, destino);
-        Peca pecaCapturada = executarMovimento(origem, destino);
+        Peca pecaCapturada = fazerMovimento(origem, destino);
 
         if (estaEmXeque(jogadorAtual)) {
             desfazerMovimento(origem, destino, pecaCapturada);
@@ -117,7 +117,7 @@ public class Partida {
 
          xeque = (estaEmXeque(oponente(jogadorAtual))) ? true : false;
 
-         if (estaEmXeque(oponente(jogadorAtual))) {
+         if (estaEmXequeMate(oponente(jogadorAtual))) {
              xequeMate = true;
          }
 
@@ -127,8 +127,9 @@ public class Partida {
 
     }
 
-    private Peca executarMovimento(Posicao origem, Posicao destino) {
-        Peca p = tabuleiro.removerPeca(origem);
+    private Peca fazerMovimento(Posicao origem, Posicao destino) {
+        PecaDeXadrez p = (PecaDeXadrez)tabuleiro.removerPeca(origem);
+        p.incrementaMoveCount();
         Peca pecaCapturada = tabuleiro.removerPeca(destino);
         tabuleiro.posicionarPeca(p, destino);
 
@@ -140,7 +141,8 @@ public class Partida {
     }
 
     private void desfazerMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
-        Peca p = tabuleiro.removerPeca(destino);
+        PecaDeXadrez p = (PecaDeXadrez)tabuleiro.removerPeca(destino);
+        p.decrementaMoveCount();
         tabuleiro.posicionarPeca(p, origem);
 
         if (pecaCapturada != null) {
@@ -208,7 +210,7 @@ public class Partida {
                     if (mat[i][j]) {
                         Posicao origem = ((PecaDeXadrez) peca).getPosicaoXadrez().toPosicao();
                         Posicao destino = new Posicao(i, j);
-                        Peca pecaCapturada = executarMovimento(origem, destino);
+                        Peca pecaCapturada = fazerMovimento(origem, destino);
                         boolean estaEmXeque = estaEmXeque(cor);
                         desfazerMovimento(origem, destino, pecaCapturada);
 
