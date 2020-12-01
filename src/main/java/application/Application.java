@@ -40,6 +40,12 @@ public class Application {
                 if(pecaCapturada != null){
                     capturadas.add(pecaCapturada);
                 }
+
+                if (partida.getPromovida() != null){
+                    System.out.println("Escolha a peça para promoção (Q/B/T/H)");
+                    String tipo = sc.nextLine();
+                    partida.trocarPecaPromovida(tipo);
+                }
             }catch (XadrezException e){
                 System.out.println(e.getMessage());
                 sc.nextLine();
